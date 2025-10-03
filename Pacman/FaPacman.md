@@ -174,10 +174,16 @@ $ pactree package_name
 برای حذف تمام فایل ها از حافظه پنهان، از پرچم پاک دو بار استفاده کنید، این روش تهاجمی ترین حالت است و هیچ چیز را در حافظه پنهان باقی نمی گذارد:
 # pacman -Scc
 
-دستور های اضافه23
+دستور های اضافه
+برای دانلود بسته ای بدون نصف کردن ان اجرا کنید
+# pacman -Sw package_name
+برای نصف یک بسته محلی که جزعی از مخازن خارجی نیست اجرا کنید 
+# pacman -U /path/to/package/package_name-version.pkg.tar.zst
 
-
-
+برای نگه داشتن یک کپی از یک بسته محلی در حافظه پنهان پک-من اجرا کنید
+# pacman -U file:///path/to/package/package_name-version.pkg.tar.zst
+برای نصف یک بسته خارجی که مخازن ان در  فایل پیکربندی پک–من وجود ندارن
+# pacman -U http://www.example.com/repo/example.pkg.tar.zst
 
 
 
