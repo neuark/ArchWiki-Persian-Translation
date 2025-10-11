@@ -1,0 +1,79 @@
+[[Category:Kernel (فارسی)]]
+[[Category:Lists of software (فارسی)]]
+{{Related articles start}}
+{{Related|Kernel modules}}
+{{Related|Compile kernel module}}
+{{Related|sysctl}}
+{{Related articles end}}
+<div dir="rtl">
+
+بر اساس ویکی پدیا:
+
+کرنل لینوکس یک کرنل سیستم عامل کامپیوتر یکپارچه متن باز یونیکس مانند است.
+آرچ لینوکس بر پایه کرنل لینوکس است. کرنل های لینوکس جایگزین مختلفی برای آرچ لینوکس علاوه بر آخرین کرنل پایدار موجود است. این مقاله فهرستی از برخی از گزینه های موجود در مخازن را با شرح مختصری از هر یک  است . همچنین توصیفی از پچ ها وجود دارد که میتوانند روی کرنل سیستم اعمال شوند. مقاله با یک مرور کلی از کامپایل کرنل سفارشی با پیوندهایی به روشهای مختلف به پایان میرسد.
+
+بسته های کرنل در  مسیر /usr/lib/modules/ نصب می شوند و سپس  برای کپی کردن تصویر (image) اجرایی vmlinuz به /boot/ استفاده میشوند. هنگام نصب یک کرنل متفاوت یا تعویض بین چندین کرنل، باید بوت لودر خود را تنظیم کنید تا تغییرات را اعمال کند. برای انتقال کرنل به یک نسخه قدیمی تر، ببینید
+
+== کرنل های با پشتیبانی رسمی ==
+
+* {{App|Stable|کرنل پیش فرظ لینوکس و ماژول ها، با چند پچ اعمال شده است.|https://www.kernel.org/|{{Pkg|linux}}}}
+
+* {{App|Hardened|یک کرنل لینوکس متمرکز بر امنیت که مجموعه ای از وصله های سخت افزاری را برای کاهش سوء استفاده های کرنل و فضای کاربر اعمال می کند. همچنین ویژگی های سخت افزاری کرنل بالادست بیشتری را نسبت به لینوکس امکان پذیر می کند. {{Pkg|linux}}.|https://github.com/anthraxx/linux-hardened|{{Pkg|linux-hardened}}}}
+
+* {{App|Longterm|پشتیبانی طولانی مدته (LTS) کرنل لینوکس و ماژول ها. مفید در هنگام استفاده از ماژول های خارج از درخت (out-of-tree) که ممکن است انتشار به موقع سازگار با آخرین کرنل پایدار را منتشر نمی کند.|https://www.kernel.org/|{{Pkg|linux-lts}}}}
+
+* {{App|[[Realtime kernel]]|توسط گروه کوچکی از توسعه دهندگان کرنل به رهبری اینگو مولنار نگهداری میشود. این پچ اجازه می دهد تا تقریبا تمام کرنل پیش گرفته شود، به استثنای چند منطقه بسیار کوچک از کد ("raw_spinlock مناطق بحرانی"). این کار با جایگزینی اکثر اسپینل های کرنل با موتیکس هایی که از وراثت اولویت پشتیبانی می کنند و همچنین حرکت دادن تمام وقفه ها و وقفه های نرم افزاری به موضوعات کرنل انجام می شود. threads.|https://wiki.linuxfoundation.org/realtime/start|{{Pkg|linux-rt}}, {{Pkg|linux-rt-lts}}}}
+
+: {{Note|پشتیبانی از کرنل Real-Time در لینوکس 6.12 اضافه شد}}
+
+* {{App|Zen Kernel|نتیجه تلاش مشترک هکرهای کرنل برای ارائه بهترین کرنل لینوکس ممکن برای سیستمهای روزمره.
+ For more details see [https://github.com/zen-kernel/zen-kernel/wiki/FAQ FAQ] and [https://github.com/zen-kernel/zen-kernel/wiki/Detailed-Feature-List Detailed Feature List].|https://github.com/zen-kernel/zen-kernel|{{Pkg|linux-zen}}}}
+==  کمپایل کردن ==
+روش های زیر را می توان برای کامپایل هسته خود استفاده کرد:
+; [[Arch Build System]]: استفاده میکند از کیفیت بالای وجود {{Pkg|linux}} [[PKGBUILD]] و ویژگی های مثبت [[Wikipedia:Package management system|package management]].
+; [[Kernel/Traditional compilation|Traditional compilation]]: شامل دانلود دستی یک تاربال سورس، و کامپایل در دایرکتوری خانه خود را به عنوان یک کاربر عادی.
+
+
+{{Warning | '''هشدار'''
+* استفاده از کرنل های شخصی سازی (کاستوم) شده ممکن است باعث ایجاد انواع مشکلات ثبات و قابلیت اطمینان شود ، از جمله از دست دادن داده ها شود. [[System_maintenance#Backup|پشتیبان گیری]] به شدت توصیه می شود.
+
+* آرچ لینوکس فقط به صورت رسمی از [[Kernel_(فارسی)#کرنل_های_با_پشتیبانی_رسمی|کرنل های رسمی]] پشتیبانی میکند. هنگام استفاده از یک کرنل متفاوت، لطفا در درخواست های پشتیبانی ذکر کنید. }}
+
+{{Tip|
+* بهترین راه برای افزایش سرعت سیستم شما این است که ابتدا  پیکربندی کرنل خود را به معماری و نوع پردازنده خود متناسب کنید.
+* شما می توانید اندازه کرنل خود را (و در نتیجه زمان ساخت) را با عدم پشتیبانی از چیزهایی که ندارید یا استفاده نمی کنید، کاهش دهید. به عنوان مثال پشتیبانی از چیزهایی مانند بلوتوث، video4linux، اترنت 1000 مگابیت و غیره.
+
+فایل پیکربندی ( {{ic|config}} ) برای بسته کرنل ارچ فایل بسته سورس ارچ هستند (برای مثال [https://gitlab.archlinux.org/archlinux/packaging/packages/linux 1] لینک شده برای [https://archlinux.org/packages/core/x86%2064/linux/ لینوکس] ). فایل کانفیگ کرنلی که در حال حاضر در حال اجرای ان هستید احتمال دارد که در فایل سیستم شما در {{ic|/proc/config.gz}} موجود باشد اگر گزینه کرنل {{ic|CONFIG_IKCONFIG_PROC}} روشن باشد .}}
+
+برخی از بسته های ذکر شده نیز ممکن است به عنوان بسته های باینری از طریق مخازن غیر رسمی کاربر در دسترس باشند.
+
+=== کرنل های kernel.org ===
+
+* {{App|Git|کرنل لینوکس و ماژول های ساخته شده با استفاده از منابع مخزن گیت لایتس توروالت .|https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git|{{AUR|linux-git}}}}
+* {{App|Mainline|کرنل هایی که در آن تمام ویژگی های جدید معرفی می شوند، هر 2-3 ماه منتشر می شوند.|https://www.kernel.org/|{{AUR|linux-mainline}}}}
+* {{App|Next|کرنل هایی بسیار به روز با ویژگیهایی قرار است به انتشار کرنل mainline بعدی اضافه شوند. 
+|https://www.kernel.org/doc/man-pages/linux-next.html|{{AUR|linux-next-git}}}}
+* {{App|DRM|کرنل لونکس با اخرین به روز رسانی هایی درایور کارت گرافیک |https://gitlab.freedesktop.org/drm|{{AUR|linux-drm-tip-git}}, {{AUR|linux-drm-next-git}}}}
+* {{App|Longterm|پشتیبانی طولانی مدت (LTS) کرنل لینوکس و ماژول هایش.|https://www.kernel.org/|{{AUR|linux-lts66}}, {{AUR|linux-lts61}}, {{AUR|linux-lts515}}, {{AUR|linux-lts510}}, {{AUR|linux-lts54}}}}
+
+=== کرنل های غیر رسمی ===
+* {{App|Clear| پچ هایی از پروژه لینوکس clear اینتل. ارائه بهینه سازی عملکرد و امنیت. |https://github.com/clearlinux-pkgs/linux|{{AUR|linux-clear}}}}
+
+* {{App|[[Wikipedia:Linux-libre|Libre]]|بدون درایورهای دستگاه اختصاصی ( غیر متن باز ) یا مبهم.|https://www.fsfla.org/ikiwiki/selibre/linux-libre/|{{AUR|linux-libre}}}}
+
+* {{App|Liquorix|جایگزینی کرنل ساخته شده با استفاده از پیکربندی هدفمند دبیان و منابع کرنل Zen . طراحی شده برای  دسکتاپ، چند رسانه ای و بازی، اغلب به عنوان یک کرنل جایگزین با عملکرد بالا لینوکس دبیان استفاده می شود. Damentz، مینتینیر پچ های Liquorix، یک توسعه دهنده برای پچ های Zen نیز هست.|https://liquorix.net|{{AUR|linux-lqx}}}}
+
+* {{App|pf-kernel|  تعداد انگشت شماری از ویژگی های جذاب را فراهم می کند که در کرنل mineline ادغام نشده است. توسط یک مهندس کرنل مینتین می شود. اگر پورت برای پچ گنجانده شده برای هسته های جدید به طور رسمی منتشر نشود، پچ پچ پورت های پچ را به هسته های جدید فراهم می کند و پشتیبانی می کند. برجسته ترین تکه های لینوکس-PF در حال حاضر UKSM، DDCCI، v4l2loopback و BBRv3 هستند.|https://pfkernel.natalenko.name|Packages:}}
+* {{App|Project C|کرنل با مجموعه پچ های پروژه C آلفرد چن (برنامه های BMQ و PDS).|https://gitlab.com/alfredchen/projectc|{{AUR|linux-prjc}}}}
+
+* {{App|Nitrous|کرنل لینوکس اصلاح شده بهینه شده برای اسکای لیک ( Skylake ) و جدیدتر.|https://gitlab.com/xdevs23/linux-nitrous|{{AUR|linux-nitrous}}}}
+
+* {{App|tkg| یک سیستم ساخت کرنل بسیار قابل تنظیم است که مجموعه ای از تکه ها و ترفندها را با هدف عملکرد بهتر دسک تاپ و بازی فراهم می کند. توسط اتین جوینی مینتین میشود. در میان پچ های دیگر، برنامه های مختلف CPU را ارائه می دهد: CFS، پروژه C PDS، پروژه C BMQ، MuQSS و CacULE.|https://github.com/Frogging-Family/linux-tkg|available in [[Unofficial user repositories#chaotic-aur|chaotic-aur]]}}.
+
+* {{App|VFIO|کرنل لینوکس و چند پچ نوشته شده توسط الکس ویلیامسون (acs override و i915) برای فعال کردن توانایی انجام PCI Passtrough با KVM در برخی از سیستم ها .|https://lwn.net/Articles/499240/|{{AUR|linux-vfio}}, {{AUR|linux-vfio-lts}}}}
+
+* {{App|XanMod|با هدف استفاده کامل از ورک استیشن ها با بازدهی ( پرفورمنس ) بالا، دسکتاپ های بازی، مراکز رسانه ای و دیگران و ساخته شده برای ارائه یک تجربه دسکتاپ بی نقص، سریع و نرم. این کرنل از زمانبند BFQ I/O، کنترل ازدحام TCP BBRv3، پشتیبانی از مجموعه دستورالعمل پیشرفته x86_64، بخصوص پچهای Clear لینوکس  و سایر تغییرات پیش فرض استفاده می کند.|https://xanmod.org/|{{AUR|linux-xanmod}}, {{AUR|linux-xanmod-lts}}, {{AUR|linux-xanmod-rt}}, {{AUR|linux-xanmod-bore}}}}
+
+* {{App|linux-cachyos|کرنل لینوکس SCHED-EXT + BORE + Cachy sauce توسط CachyOS با پچ های دیگر و بهبود کرنل و ماژول ها.|https://github.com/CachyOS/linux-cachyos|{{AUR|linux-cachyos}}}}
+
+بسیاری از این کرنل های غیر رسمی حاوی ویژگی هایی هستند که باید به صورت دستی فعال شوند. سعی کنید مستندات را در پچ های خود بخوانید (بسیاری از آنها در حال حاضر شامل تغییرات در دایرکتوری {{ic|/Documentation}} در منبع کرنل هستند) یا نام پچ را در وب جستجو کنید.
