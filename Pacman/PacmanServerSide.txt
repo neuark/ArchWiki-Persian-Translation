@@ -3,6 +3,7 @@
 [[Category:Package manager (فارسی)]]
 [[de:Pacman]]
 [[es:Pacman]]
+[[en:Pacman]]
 [[fi:Pacman]]
 [[fr:Pacman]]
 [[hu:Pacman]]
