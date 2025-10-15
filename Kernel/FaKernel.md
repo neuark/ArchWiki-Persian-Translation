@@ -52,3 +52,86 @@
 
 بسیاری از این کرنل های غیر رسمی حاوی ویژگی هایی هستند که باید به صورت دستی فعال شوند. سعی کنید مستندات را در پچ های خود بخوانید (بسیاری از آنها در حال حاضر شامل تغییرات در دایرکتوری /Documentation در منبع کرنل هستند) یا نام پچ را در وب جستجو کنید.
 
+##### پنیک کرنل
+
+پنیک کرنل زمانی رخ میدهد که هسته لینوکس وارد حالت شکست غیرقابل بازیابی شود. این حالت به طور معمول از درایورهای سخت افزاری ناشی می شود که منجر به قفل شدن دستگاه، عدم پاسخ و نیاز به راه اندازی مجدد مسشود .
+
+
+> Note
+>> کرنل پنیک ها گاهی اوقات به عنوان oops یا kernel oops نامیده می شود. در حالی که هر دو حالت پنیک و oops به عنوان نتیجه یک حالت عدم موفقیت رخ میدهد، opps از این نظر عمومی تر است که لزوماً منجر به قفل شدن سیستم نمی شود: گاهی اوقات کرنل میتواند با به پایان دادن یک کار متخلف و انجام کار، از  حالت opps بازیابی کند.
+
+> Tip
+>> متغیر کرنل oops=panic در فرایند بوت قرار دهید یا برای اجبار یک oops قابل بازیابی به ایجاد یک کرنل پنیک در /proc/sys/kernel/panic_on_oops عدد 1 را بنویسید. این قابل توصیه است اگر شما در مورد احتمال کمی از بی ثباتی سیستم ناشی از بازیابی OOPS نگران هستید که ممکن است ارورهای آینده را دشوار برای تشخیص کند .
+##### بررسی پیام کرنل پنیک
+
+اگر یک کرنل پنیک در اوایل فرآیند بوت رخ دهد، شما ممکن است یک پیام در کنسول حاوی Kernel panic - not syncing اما هنگامی که systemd در حال اجرا است، پیام های هسته به طور معمول دریافت و نوشته شده به ورود به سیستم. با این حال، هنگامی که یک کرنل پنیک رخ میدهد، خروجی پیام تشخیصی توسط کرنل تقریباً هرگز به فایل لاگ بر روی دیسک نوشته نمیشود زیرا ماشین قبل از این که system-journald شانسی برای نوشتن لاگ داشته باشد، قفل میشود.
+
+##### کد QR در صفحه ای ابی 
+از آ لینوکس 6.10 (برای drm_panic) ، هسته پنیک را به عنوان یک کد QR (به طور پیش فرض) در یک صفحه آبی نمایش می دهد. stack ردیابی  در URL داده شده توسط کد QR قابل مشاهده است. URL شامل اطلاعات مختلف و ردیابی پشته فشرده شده توسط gzip و کد گذاری شده در قطعه URL است که به سرور منتقل نمی شود (در سمت کاربر پردازش می شود). 
+یک  مثال پنیک را می توان با یک تصویر در یک پست مروم مشاهده کرد.
+
+شما می توانید با استفاده از متغیر panic_screen=kmsg به ماژول کرنل drm به رفتار قدیمی بازگردید.(یا drm.panic_screen=kmsg به عنوان متغیر کرنل) برای نمایش ردیابی پشته در یک کنسول.
+
+##### روش کنسول 
+روش سبک "قدیمی" برای مشاهده کرش در کنسول درحالی که اتفاق می افتد هنوز در دسترس است (بدون توسل به راه اندازی یک crashkernel kdump). بوت با متغیرهای کرنل زیر و تلاش برای بازتولید پنیک در tty1:
+> systemd.journald.forward_to_console=1 console=tty1
+
+> Tip
+>> در صورتی که پیام پنیک  بیش از حد سریع برای بررسی حرکت می کند، سعی کنید متغیر کرنل pause_on_oops=seconds را در بوت امتحان کنید.
+
+##### سناریو مثال : ماژول بد
+میتوان به بهترین نحو حدس زد که چه ساب سیستم یا ماژول با استفاده از اطلاعات موجود در پیام تشخیصی باعث ایجاد کرنل میشود. در این سناریو، ما در هنگام بوت شدن یک پنیک بر روی برخی از ماشین های خیالی داریم. به خطوط برجسته شده به صورت پررنگ توجه کنید:
+
+kernel: BUG: unable to handle kernel NULL pointer dereference at (null) 1
+kernel: IP: fw_core_init+0x18/0x1000 [firewire_core] 2
+kernel: PGD 718d00067
+kernel: P4D 718d00067
+kernel: PUD 7b3611067
+kernel: PMD 0
+kernel:
+kernel: Oops: 0002 [#1] PREEMPT SMP
+kernel: Modules linked in: firewire_core(+) crc_itu_t cfg80211 rfkill ipt_REJECT nf_reject_ipv4 nf_log_ipv4 nf_log_common xt_LOG nf_conntrack_ipv4 ... 3
+kernel: CPU: 6 PID: 1438 Comm: modprobe Tainted: P           O    4.13.3-1-ARCH #1
+kernel: Hardware name: Gigabyte Technology Co., Ltd. H97-D3H/H97-D3H-CF, BIOS F5 06/26/2014
+kernel: task: ffff9c667abd9e00 task.stack: ffffb53b8db34000
+kernel: RIP: 0010:fw_core_init+0x18/0x1000 [firewire_core]
+kernel: RSP: 0018:ffffb53b8db37c68 EFLAGS: 00010246
+kernel: RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+kernel: RDX: 0000000000000000 RSI: 0000000000000008 RDI: ffffffffc16d3af4
+kernel: RBP: ffffb53b8db37c70 R08: 0000000000000000 R09: ffffffffae113e95
+kernel: R10: ffffe93edfdb9680 R11: 0000000000000000 R12: ffffffffc16d9000
+kernel: R13: ffff9c6729bf8f60 R14: ffffffffc16d5710 R15: ffff9c6736e55840
+kernel: FS:  00007f301fc80b80(0000) GS:ffff9c675dd80000(0000) knlGS:0000000000000000
+kernel: CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+kernel: CR2: 0000000000000000 CR3: 00000007c6456000 CR4: 00000000001406e0
+kernel: Call Trace:
+kernel:  do_one_initcall+0x50/0x190 4
+kernel:  ? do_init_module+0x27/0x1f2
+kernel:  do_init_module+0x5f/0x1f2
+kernel:  load_module+0x23f3/0x2be0
+kernel:  SYSC_init_module+0x16b/0x1a0
+kernel:  ? SYSC_init_module+0x16b/0x1a0
+kernel:  SyS_init_module+0xe/0x10
+kernel:  entry_SYSCALL_64_fastpath+0x1a/0xa5
+kernel: RIP: 0033:0x7f301f3a2a0a
+kernel: RSP: 002b:00007ffcabbd1998 EFLAGS: 00000246 ORIG_RAX: 00000000000000af
+kernel: RAX: ffffffffffffffda RBX: 0000000000c85a48 RCX: 00007f301f3a2a0a
+kernel: RDX: 000000000041aada RSI: 000000000001a738 RDI: 00007f301e7eb010
+kernel: RBP: 0000000000c8a520 R08: 0000000000000001 R09: 0000000000000085
+kernel: R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000c79208
+kernel: R13: 0000000000c8b4d8 R14: 00007f301e7fffff R15: 0000000000000030
+kernel: Code: <c7> 04 25 00 00 00 00 01 00 00 00 bb f4 ff ff ff e8 73 43 9c ec 48
+kernel: RIP: fw_core_init+0x18/0x1000 [firewire_core] RSP: ffffb53b8db37c68
+kernel: CR2: 0000000000000000
+kernel: ---[ end trace 71f4306ea1238f17 ]---
+kernel: Kernel panic - not syncing: Fatal exception 5
+kernel: Kernel Offset: 0x80000000 from 0xffffffff810000000 (relocation range: 0xffffffff800000000-0xfffffffffbffffffff
+kernel: ---[ end Kernel panic - not syncing: Fatal exception
+
+* نوع خطایی را که باعث پنیک شده است نشان می دهد. در این مورد  اشکال برنامه نویسی بود.
+* نشان می دهد که پکین در یک تابع به نام fw_core_init در ماژول firewire_core اتفاق افتاده است.
+* نشان می دهد که firewire_core آخرین ماژول بارگذاری شده بوده است.
+* نشان می دهد که تابعی که function fw_core_init نامیده می شود do_one_initcall بوده است.
+* نشان می دهد که این پیام OOPS در واقع یک کرنل پنیکی است و سیستم در حال حاضر قفل شده است.
+
+
